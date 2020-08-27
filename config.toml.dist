@@ -1,0 +1,18 @@
+# Configuration file
+
+project = "go-webservice-model"
+version = "1.0.0"
+author = "Fabien Bellanger"
+environment = "development" # development | production
+
+[server]
+host = "localhost"
+port = 8888
+
+[database]
+driver = "mysql"
+host = "127.0.0.1"
+port = 3306
+username = ""
+password = ""
+name = ""
