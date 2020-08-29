@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gofiber/basicauth"
 	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
 	"github.com/gofiber/fiber/middleware"
@@ -19,6 +20,7 @@ func newServer() *server {
 
 	s.initHTTPServer()
 	s.routes()
+	s.initPprof()
 
 	return s
 }
@@ -35,6 +37,19 @@ func (s *server) initHTTPServer() {
 	// Recover
 	// -------
 	s.router.Use(middleware.Recover())
+}
+
+func (s *server) initPprof() {
+	// Basic Auth
+	// ----------
+	// TODO: Put in config.toml
+	cfg := basicauth.Config{
+		Users: map[string]string{
+			"john":  "doe",
+			"admin": "123456",
+		},
+	}
+	s.router.Use(basicauth.New(cfg))
 
 	// pprof
 	// -----
