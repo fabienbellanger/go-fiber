@@ -16,3 +16,8 @@ port = 3306
 username = ""
 password = ""
 name = ""
+
+[debug]
+pprof = true
+basicAuthUsername = ""
+basicAuthPassword = ""

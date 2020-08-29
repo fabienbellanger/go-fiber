@@ -6,16 +6,19 @@ import (
 	"github.com/gofiber/fiber"
 	"github.com/gofiber/fiber/middleware"
 	"github.com/gofiber/pprof"
+	"github.com/spf13/viper"
 )
 
 type server struct {
 	store  store
 	router *fiber.App
+	mode   string
 }
 
 func newServer() *server {
 	s := &server{
 		router: fiber.New(),
+		mode:   "production",
 	}
 
 	s.initHTTPServer()
@@ -26,6 +29,14 @@ func newServer() *server {
 }
 
 func (s *server) initHTTPServer() {
+	// Mode
+	// ----
+	s.mode = viper.GetString("environment")
+
+	// Default RequestID
+	// -----------------
+	s.router.Use(middleware.RequestID())
+
 	// CORS
 	// ----
 	s.router.Use(cors.New())
@@ -40,18 +51,19 @@ func (s *server) initHTTPServer() {
 }
 
 func (s *server) initPprof() {
-	// Basic Auth
-	// ----------
-	// TODO: Put in config.toml
-	cfg := basicauth.Config{
-		Users: map[string]string{
-			"john":  "doe",
-			"admin": "123456",
-		},
-	}
-	s.router.Use(basicauth.New(cfg))
+	if viper.GetBool("debug.pprof") {
+		// Basic Auth
+		// ----------
+		// TODO: Put in config.toml
+		cfg := basicauth.Config{
+			Users: map[string]string{
+				viper.GetString("debug.basicAuthUsername"): viper.GetString("debug.basicAuthPassword"),
+			},
+		}
+		s.router.Use(basicauth.New(cfg))
 
-	// pprof
-	// -----
-	s.router.Use(pprof.New())
+		// pprof
+		// -----
+		s.router.Use(pprof.New())
+	}
 }

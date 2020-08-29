@@ -30,6 +30,7 @@ func initConfig() error {
 // run launches a server instance.
 func run() error {
 	server := newServer()
+	log.Printf("Server in %s mode\n", server.mode)
 
 	// Database initialization
 	// -----------------------
@@ -48,5 +49,6 @@ func run() error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
