@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"log"
 
 	"github.com/spf13/viper"
 )
@@ -11,15 +11,13 @@ func main() {
 	// Configuration initialization
 	// ----------------------------
 	if err := initConfig(); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+		log.Fatalln(err)
 	}
 
 	// Server creation
 	// ---------------
 	if err := run(); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+		log.Fatalln(err)
 	}
 }
 
