@@ -8,7 +8,7 @@ func (s *server) handlerHome(c *fiber.Ctx) {
 	c.Send("Hello, World 👋!")
 }
 
-func (s *server) handlerBigJson(c *fiber.Ctx) {
+func (s *server) handlerBigJSON(c *fiber.Ctx) {
 	type User struct {
 		ID        int    `json:"id"`
 		Username  string `json:"username"`

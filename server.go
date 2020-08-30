@@ -52,18 +52,21 @@ func (s *server) initHTTPServer() {
 
 func (s *server) initPprof() {
 	if viper.GetBool("debug.pprof") {
+		private := s.router.Group("private", func(c *fiber.Ctx) {
+			c.Next()
+		})
+
 		// Basic Auth
 		// ----------
-		// TODO: Put in config.toml
 		cfg := basicauth.Config{
 			Users: map[string]string{
 				viper.GetString("debug.basicAuthUsername"): viper.GetString("debug.basicAuthPassword"),
 			},
 		}
-		s.router.Use(basicauth.New(cfg))
+		private.Use(basicauth.New(cfg))
 
 		// pprof
 		// -----
-		s.router.Use(pprof.New())
+		private.Use(pprof.New())
 	}
 }

@@ -13,10 +13,13 @@ import (
 type store interface {
 	open() error
 	close() error
+
+	user() userStore
 }
 
 type dbStore struct {
-	DB *sqlx.DB
+	DB        *sqlx.DB
+	userStore userStore
 }
 
 func (s *dbStore) open() error {
@@ -32,9 +35,17 @@ func (s *dbStore) open() error {
 	log.Printf("Connected to DB %s", viper.GetString("database.name"))
 	s.DB = db
 
+	// User store
+	// ----------
+	s.userStore = &dbUserStore{DB: db}
+
 	return nil
 }
 
 func (s *dbStore) close() error {
 	return s.DB.Close()
+}
+
+func (s *dbStore) user() userStore {
+	return s.userStore
 }
