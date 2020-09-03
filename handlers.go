@@ -1,11 +1,18 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber"
 )
 
 func (s *server) handlerHome(c *fiber.Ctx) {
+	y := 0
+	v := 34 / y
+	log.Println(v)
 	c.Send("Hello, World 👋!")
+	// err := fiber.NewError(500, "Internal Server Error")
+	// c.Next(err) // 404 Sorry, not found!
 }
 
 func (s *server) handlerBigJSON(c *fiber.Ctx) {

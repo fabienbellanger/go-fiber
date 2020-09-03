@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gofiber/basicauth"
 	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
@@ -24,6 +26,7 @@ func newServer() *server {
 	s.initHTTPServer()
 	s.routes()
 	s.initPprof()
+	s.errorHandling()
 
 	return s
 }
@@ -68,5 +71,31 @@ func (s *server) initPprof() {
 		// pprof
 		// -----
 		private.Use(pprof.New())
+	}
+}
+
+func (s *server) errorHandling() {
+	s.router.Settings.ErrorHandler = func(c *fiber.Ctx, err error) {
+		code := fiber.StatusInternalServerError
+
+		// Retreive the custom statuscode if it's an fiber.*Error
+		e, ok := err.(*fiber.Error)
+
+		if ok {
+			code = e.Code
+		}
+
+		log.Printf("Error:%v - Code:%v", e, code)
+
+		if e != nil {
+			c.JSON(e)
+		}
+
+		if code == 500 {
+			c.JSON(fiber.Map{
+				"code":    code,
+				"message": "Internal Server Error",
+			})
+		}
 	}
 }
