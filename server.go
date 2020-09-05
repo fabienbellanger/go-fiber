@@ -28,6 +28,15 @@ func newServer() *server {
 	s.initPprof()
 	s.errorHandling()
 
+	// Custom 404 (after all routes)
+	// -----------------------------
+	s.router.Use(func(ctx *fiber.Ctx) {
+		ctx.Status(404).JSON(fiber.Map{
+			"code":    404,
+			"message": "Resource Not Found",
+		})
+	})
+
 	return s
 }
 
@@ -46,20 +55,13 @@ func (s *server) initHTTPServer() {
 
 	// Logger
 	// ------
-	s.router.Use(middleware.Logger())
+	if s.mode != "production" {
+		s.router.Use(middleware.Logger())
+	}
 
 	// Recover
 	// -------
 	s.router.Use(middleware.Recover())
-
-	// Custom 404 (after all routes)
-	// -----------------------------
-	s.router.Use(func(ctx *fiber.Ctx) {
-		ctx.Status(404).JSON(fiber.Map{
-			"code":    404,
-			"message": "Resource Not Found",
-		})
-	})
 }
 
 func (s *server) initPprof() {
