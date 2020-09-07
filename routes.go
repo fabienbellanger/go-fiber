@@ -6,6 +6,7 @@ func (s *server) routes() {
 	v1.Get("/", s.handlerHome)
 	v1.Get("/home", s.handlerHome)
 	v1.Get("/json", s.handlerBigJSON)
+	v1.Get("/json-stream", s.handlerBigJSONStream)
 
 	// Users routes
 	// ------------
