@@ -12,4 +12,14 @@ func (s *server) routes() {
 	// ------------
 	users := v1.Group("/users")
 	users.Get("/", s.handlerGetUser)
+
+	// Login
+	// -----
+	s.router.Post("/login", s.handlerUserLogin)
+}
+
+func (s *server) protectedRoutes() {
+	protected := s.router.Group("/protected")
+
+	protected.Get("/test", s.handlerProtectedTest)
 }

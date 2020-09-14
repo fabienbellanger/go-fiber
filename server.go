@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	jwtware "github.com/gofiber/jwt/v2"
 	"github.com/spf13/viper"
 )
 
@@ -28,12 +28,14 @@ func newServer() *server {
 	s.initHTTPServer()
 	s.routes()
 	s.initPprof()
+	s.initJWT()
+	s.protectedRoutes()
 
 	// Custom 404 (after all routes)
 	// -----------------------------
 	s.router.Use(func(ctx *fiber.Ctx) error {
-		return ctx.Status(404).JSON(fiber.Map{
-			"code":    404,
+		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"code":    fiber.StatusNotFound,
 			"message": "Resource Not Found",
 		})
 	})
@@ -86,6 +88,19 @@ func (s *server) initPprof() {
 	}
 }
 
+func (s *server) initJWT() {
+	s.router.Use(jwtware.New(jwtware.Config{
+		SigningMethod: "HS512",
+		SigningKey:    []byte(viper.GetString("jwt.secret")),
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"code":    fiber.StatusUnauthorized,
+				"message": "Invalid or expired JWT",
+			})
+		},
+	}))
+}
+
 func errorHandling() fiber.Config {
 	return fiber.Config{
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
@@ -98,13 +113,11 @@ func errorHandling() fiber.Config {
 				code = e.Code
 			}
 
-			log.Printf("Error:%v - Code:%v", e, code)
-
 			if e != nil {
 				return c.JSON(e)
 			}
 
-			if code == 500 {
+			if code == fiber.StatusInternalServerError {
 				return c.JSON(fiber.Map{
 					"code":    code,
 					"message": "Internal Server Error",
