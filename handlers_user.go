@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
-func (s *server) handlerGetUser(c *fiber.Ctx) {
+func (s *server) handlerGetUser(c *fiber.Ctx) error {
 	u := s.store.user().getUser()
-	c.JSON(u)
+	return c.JSON(u)
 }

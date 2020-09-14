@@ -3,14 +3,14 @@ package main
 import (
 	"encoding/json"
 
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
-func (s *server) handlerHome(c *fiber.Ctx) {
-	c.Send("Hello, World 👋!")
+func (s *server) handlerHome(c *fiber.Ctx) error {
+	return c.SendString("Hello, World 👋!")
 }
 
-func (s *server) handlerBigJSON(c *fiber.Ctx) {
+func (s *server) handlerBigJSON(c *fiber.Ctx) error {
 	type User struct {
 		ID        int    `json:"id"`
 		Username  string `json:"username"`
@@ -27,10 +27,10 @@ func (s *server) handlerBigJSON(c *fiber.Ctx) {
 			Firstname: "My Firstname",
 		})
 	}
-	c.JSON(&users)
+	return c.JSON(&users)
 }
 
-func (s *server) handlerBigJSONStream(c *fiber.Ctx) {
+func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 	type User struct {
 		ID        int    `json:"id"`
 		Username  string `json:"username"`
@@ -41,7 +41,7 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) {
 
 	c.Set("Content-Type", "application/json")
 
-	c.Write("[")
+	c.Write([]byte("["))
 
 	n := 100000
 	for i := 0; i < n; i++ {
@@ -58,10 +58,10 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) {
 		c.Write(user)
 
 		if i < n-1 {
-			c.Write(",")
+			c.Write([]byte(","))
 		}
 	}
-	c.Write("]")
+	c.Write([]byte("]"))
 
-	c.SendStatus(200)
+	return c.SendStatus(200)
 }
