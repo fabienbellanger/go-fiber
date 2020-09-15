@@ -2,6 +2,8 @@ package main
 
 import (
 	"os"
+	"strings"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
@@ -9,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	jwtware "github.com/gofiber/jwt/v2"
 	"github.com/spf13/viper"
 )
@@ -50,7 +53,14 @@ func (s *server) initHTTPServer() {
 
 	// CORS
 	// ----
-	s.router.Use(cors.New())
+	s.router.Use(cors.New(cors.Config{
+		AllowOrigins:     strings.Join(viper.GetStringSlice("server.cors.allowOrigins"), ", "),
+		AllowMethods:     strings.Join(viper.GetStringSlice("server.cors.allowMethods"), ", "),
+		AllowHeaders:     strings.Join(viper.GetStringSlice("server.cors.allowHeaders"), ", "),
+		ExposeHeaders:    strings.Join(viper.GetStringSlice("server.cors.exposeHeaders"), ", "),
+		AllowCredentials: viper.GetBool("server.cors.allowCredentials"),
+		MaxAge:           int(12 * time.Hour),
+	}))
 
 	// Logger
 	// ------
@@ -67,6 +77,14 @@ func (s *server) initHTTPServer() {
 	// Recover
 	// -------
 	s.router.Use(recover.New())
+
+	// Request ID
+	// ----------
+	s.router.Use(requestid.New())
+
+	// Timer
+	// -----
+	s.router.Use(fiberProcessTimer())
 }
 
 func (s *server) initPprof() {

@@ -15,7 +15,7 @@ type dbUserStore struct {
 func (s *dbUserStore) getUser() User {
 	return User{
 		ID:        1,
-		Lastname:  "Bellanger",
-		Firstname: "Fabien",
+		Lastname:  "Doe",
+		Firstname: "John",
 	}
 }

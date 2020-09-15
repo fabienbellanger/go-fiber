@@ -1,6 +1,6 @@
 # Configuration file
 
-project = "go-webservice-model"
+project = "go-fiber"
 version = "1.0.0"
 author = "Fabien Bellanger"
 environment = "development" # development | production
@@ -8,6 +8,13 @@ environment = "development" # development | production
 [server]
 host = "localhost"
 port = 8888
+
+    [server.cors]
+    allowOrigins = ["*"]
+    allowMethods = ["GET", "POST", "HEAD", "PUT", "DELETE", "PATCH"]
+    allowHeaders = ["Origin", "Content-Type", "Accept"]
+	exposeHeaders = []
+    allowCredentials = false
 
 [database]
 driver = "mysql"
@@ -18,6 +25,6 @@ password = ""
 name = ""
 
 [debug]
-pprof = true
+pprof = false
 basicAuthUsername = ""
 basicAuthPassword = ""
