@@ -28,3 +28,6 @@ name = ""
 pprof = false
 basicAuthUsername = ""
 basicAuthPassword = ""
+
+[jwt]
+secret = "mySecretKeyForJWT"

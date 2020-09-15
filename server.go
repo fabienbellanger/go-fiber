@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fabienbellanger/go-fiber/middlewares/timer"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -84,7 +85,10 @@ func (s *server) initHTTPServer() {
 
 	// Timer
 	// -----
-	s.router.Use(fiberProcessTimer())
+	s.router.Use(timer.New(timer.Config{
+		DisplayMilliseconds: true,
+		DisplayHuman:        true,
+	}))
 }
 
 func (s *server) initPprof() {
