@@ -8,7 +8,6 @@ import (
 )
 
 // Config defines the configuration for middleware.
-// TODO: Add header name configuration instead of X-Process-Time
 type Config struct {
 	// DisplaySeconds indicates the process time in seconds.
 	//
