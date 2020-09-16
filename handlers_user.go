@@ -28,7 +28,6 @@ func (s *server) handlerUserLogin(c *fiber.Ctx) error {
 	// Set claims
 	claims := token.Claims.(jwt.MapClaims)
 	claims["name"] = "John Doe"
-	claims["admin"] = true
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
 	// Generate encoded token and send it as response.

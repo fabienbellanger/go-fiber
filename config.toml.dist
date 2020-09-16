@@ -13,8 +13,8 @@ port = 8888
     allowOrigins = ["*"]
     allowMethods = ["GET", "POST", "HEAD", "PUT", "DELETE", "PATCH"]
     allowHeaders = ["Origin", "Content-Type", "Accept"]
-	exposeHeaders = []
     allowCredentials = false
+	exposeHeaders = []
 
 [database]
 driver = "mysql"
