@@ -13,8 +13,14 @@ port = 8888
     allowOrigins = ["*"]
     allowMethods = ["GET", "POST", "HEAD", "PUT", "DELETE", "PATCH"]
     allowHeaders = ["Origin", "Content-Type", "Accept"]
-    allowCredentials = false
+    allowCredentials = true
 	exposeHeaders = []
+
+    [server.limiter]
+    enable = false
+    excludedIP = ["localhost"]
+    max = 20
+    duration = 30 # in seconds
 
 [database]
 driver = "mysql"

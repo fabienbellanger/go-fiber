@@ -6,9 +6,11 @@ import (
 	"time"
 
 	"github.com/fabienbellanger/go-fiber/middlewares/timer"
+	"github.com/fabienbellanger/goutils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -89,6 +91,31 @@ func (s *server) initHTTPServer() {
 		DisplayMilliseconds: true,
 		DisplayHuman:        true,
 	}))
+
+	// Limiter
+	// -------
+	if viper.GetBool("server.limiter.enable") {
+		s.router.Use(limiter.New(limiter.Config{
+			Next: func(c *fiber.Ctx) bool {
+				excludedIP := viper.GetStringSlice("server.limiter.excludedIP")
+				if len(excludedIP) == 0 {
+					return false
+				}
+				return goutils.StringInSlice(c.IP(), excludedIP)
+			},
+			Max:      viper.GetInt("server.limiter.max"),
+			Duration: viper.GetDuration("server.limiter.duration") * time.Second,
+			Key: func(c *fiber.Ctx) string {
+				return c.IP()
+			},
+			LimitReached: func(c *fiber.Ctx) error {
+				return c.Status(fiber.StatusTooManyRequests).JSON(fiber.Map{
+					"code":    fiber.StatusTooManyRequests,
+					"message": "Too Many Requests",
+				})
+			},
+		}))
+	}
 }
 
 func (s *server) initPprof() {
