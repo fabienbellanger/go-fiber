@@ -39,29 +39,27 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 		Firstname string `json:"firstname"`
 	}
 
-	c.Set("Content-Type", "application/json")
+	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
 
 	c.Write([]byte("["))
-
+	enc := json.NewEncoder(c)
 	n := 100000
 	for i := 0; i < n; i++ {
-		user, err := json.Marshal(User{
+		user := User{
 			ID:        i + 1,
 			Username:  "My Username",
 			Lastname:  "My Lastname",
 			Firstname: "My Firstname",
-		})
-		if err != nil {
-			continue
 		}
-
-		c.Write(user)
+		if err := enc.Encode(user); err != nil {
+			return err
+		}
 
 		if i < n-1 {
 			c.Write([]byte(","))
 		}
 	}
-	c.Write([]byte("]"))
+	//c.Write([]byte("]"))
 
-	return c.SendStatus(200)
+	return nil
 }
