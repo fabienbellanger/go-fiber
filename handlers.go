@@ -8,7 +8,8 @@ import (
 )
 
 func (s *server) handlerHome(c *fiber.Ctx) error {
-	return c.SendString("Hello, World 👋!")
+	name := c.Params("name")
+	return c.SendString("Hello, " + name + " 👋!")
 }
 
 func (s *server) handlerBigJSON(c *fiber.Ctx) error {

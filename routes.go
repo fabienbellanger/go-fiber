@@ -4,7 +4,7 @@ func (s *server) routes() {
 	v1 := s.router.Group("/v1")
 
 	v1.Get("/", s.handlerHome)
-	v1.Get("/home", s.handlerHome)
+	v1.Get("/home/:name", s.handlerHome)
 	v1.Get("/json", s.handlerBigJSON)
 	v1.Get("/json-stream", s.handlerBigJSONStream)
 

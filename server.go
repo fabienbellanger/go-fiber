@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -36,6 +37,19 @@ func newServer() *server {
 	s.initPprof()
 	s.initJWT()
 	s.protectedRoutes()
+
+	// Liste des routes
+	// ----------------
+	stask := s.router.Stack()
+	for m := range stask {
+		for r := range stask[m] {
+			route := stask[m][r]
+			if route.Method != "HEAD" && route.Method != "CONNECT" &&
+				route.Method != "TRACE" && route.Method != "OPTIONS" {
+				fmt.Printf("%v\t%v\t%v\n", route.Method, route.Path, route.Params)
+			}
+		}
+	}
 
 	// Custom 404 (after all routes)
 	// -----------------------------
