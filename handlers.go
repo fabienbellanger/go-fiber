@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -40,27 +41,28 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 	}
 
 	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
+
 	c.Context().SetBodyStreamWriter(func(w *bufio.Writer) {
 		w.WriteString("[")
-		// enc := json.NewEncoder(w)
+		enc := json.NewEncoder(w)
 		n := 100000
 		for i := 0; i < n; i++ {
-			if i > 0 {
+
+			user := User{
+				ID:        i + 1,
+				Username:  "My Username",
+				Lastname:  "My Lastname",
+				Firstname: "My Firstname",
+			}
+			if err := enc.Encode(user); err != nil {
+				continue
+			}
+
+			if i < n-1 {
 				w.WriteString(",")
 			}
 
-			w.WriteString(`{"id": 1, "username": "My Username", "lastname": "My Lastname", "firstname": "My Firstname"}`)
-			w.Flush()
-
-			// user := User{
-			// 	ID:        i + 1,
-			// 	Username:  "My Username",
-			// 	Lastname:  "My Lastname",
-			// 	Firstname: "My Firstname",
-			// }
-			// if err := enc.Encode(user); err != nil {
-			// 	println("error")
-			// }
+			// w.Flush()
 		}
 		w.WriteString("]")
 	})
