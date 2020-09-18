@@ -28,7 +28,7 @@ type server struct {
 
 func newServer() *server {
 	s := &server{
-		router: fiber.New(errorHandling()),
+		router: fiber.New(serverConfig()),
 		mode:   "production",
 	}
 
@@ -40,16 +40,7 @@ func newServer() *server {
 
 	// Liste des routes
 	// ----------------
-	stask := s.router.Stack()
-	for m := range stask {
-		for r := range stask[m] {
-			route := stask[m][r]
-			if route.Method != "HEAD" && route.Method != "CONNECT" &&
-				route.Method != "TRACE" && route.Method != "OPTIONS" {
-				fmt.Printf("%v\t%v\t%v\n", route.Method, route.Path, route.Params)
-			}
-		}
-	}
+	// s.displayRoutes()
 
 	// Custom 404 (after all routes)
 	// -----------------------------
@@ -164,8 +155,10 @@ func (s *server) initJWT() {
 	}))
 }
 
-func errorHandling() fiber.Config {
+func serverConfig() fiber.Config {
 	return fiber.Config{
+		// Gestion des erreurs
+		// -------------------
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
 			code := fiber.StatusInternalServerError
 
@@ -189,5 +182,20 @@ func errorHandling() fiber.Config {
 
 			return nil
 		},
+		Prefork:               viper.GetBool("server.prefork"),
+		DisableStartupMessage: false,
+	}
+}
+
+func (s *server) displayRoutes() {
+	stask := s.router.Stack()
+	for m := range stask {
+		for r := range stask[m] {
+			route := stask[m][r]
+			if route.Method != "HEAD" && route.Method != "CONNECT" &&
+				route.Method != "TRACE" && route.Method != "OPTIONS" {
+				fmt.Printf("%v\t%v\t%v\n", route.Method, route.Path, route.Params)
+			}
+		}
 	}
 }

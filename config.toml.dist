@@ -8,6 +8,7 @@ environment = "development" # development | production
 [server]
 host = "localhost"
 port = 8888
+prefork = true
 
     [server.cors]
     allowOrigins = ["*"]

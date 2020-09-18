@@ -41,7 +41,7 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 		Firstname string `json:"firstname"`
 	}
 
-	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
+	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSONCharsetUTF8)
 
 	c.Context().SetBodyStreamWriter(func(w *bufio.Writer) {
 		w.WriteString("[")
