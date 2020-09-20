@@ -40,7 +40,7 @@ func newServer() *server {
 
 	// Liste des routes
 	// ----------------
-	// s.displayRoutes()
+	s.displayRoutes()
 
 	// Custom 404 (after all routes)
 	// -----------------------------
@@ -184,6 +184,7 @@ func serverConfig() fiber.Config {
 		},
 		Prefork:               viper.GetBool("server.prefork"),
 		DisableStartupMessage: false,
+		StrictRouting:         true,
 	}
 }
 
