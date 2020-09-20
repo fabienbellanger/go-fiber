@@ -29,7 +29,7 @@ func initConfig() error {
 
 // run launches a server instance.
 func run() error {
-	server := newServer()
+	server := newServer(viper.GetString("environment"))
 	log.Printf("Server in %s mode\n", server.mode)
 
 	// Database initialization

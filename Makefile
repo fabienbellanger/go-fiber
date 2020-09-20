@@ -56,7 +56,7 @@ view-cover-count: test-cover-count html-cover-count
 view-cover-atomic: test-cover-atomic html-cover-atomic
 
 bench: 
-	$(GOTEST) -bench=. ./...
+	$(GOTEST) -benchmem -bench=. ./...
 
 clean: 
 	$(GOCLEAN)

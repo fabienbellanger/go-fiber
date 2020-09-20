@@ -26,10 +26,10 @@ type server struct {
 	mode   string
 }
 
-func newServer() *server {
+func newServer(mode string) *server {
 	s := &server{
 		router: fiber.New(serverConfig()),
-		mode:   "production",
+		mode:   mode,
 	}
 
 	s.initHTTPServer()
@@ -40,7 +40,7 @@ func newServer() *server {
 
 	// Liste des routes
 	// ----------------
-	s.displayRoutes()
+	// s.displayRoutes()
 
 	// Custom 404 (after all routes)
 	// -----------------------------
@@ -55,10 +55,6 @@ func newServer() *server {
 }
 
 func (s *server) initHTTPServer() {
-	// Mode
-	// ----
-	s.mode = viper.GetString("environment")
-
 	// CORS
 	// ----
 	s.router.Use(cors.New(cors.Config{
