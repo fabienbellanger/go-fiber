@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/fabienbellanger/go-fiber/stores"
 	"github.com/spf13/viper"
 
 	_ "github.com/go-sql-driver/mysql" // MySQL driver
@@ -14,12 +15,12 @@ type store interface {
 	open() error
 	close() error
 
-	user() userStore
+	user() stores.UserStore
 }
 
 type dbStore struct {
 	DB        *sqlx.DB
-	userStore userStore
+	userStore stores.UserStore
 }
 
 func (s *dbStore) open() error {
@@ -37,7 +38,7 @@ func (s *dbStore) open() error {
 
 	// User store
 	// ----------
-	s.userStore = &dbUserStore{DB: db}
+	s.userStore = &stores.DBUserStore{DB: db}
 
 	return nil
 }
@@ -46,6 +47,6 @@ func (s *dbStore) close() error {
 	return s.DB.Close()
 }
 
-func (s *dbStore) user() userStore {
+func (s *dbStore) user() stores.UserStore {
 	return s.userStore
 }

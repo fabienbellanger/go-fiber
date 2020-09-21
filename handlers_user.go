@@ -9,7 +9,7 @@ import (
 )
 
 func (s *server) handlerGetUser(c *fiber.Ctx) error {
-	u := s.store.user().getUser()
+	u := s.store.user().GetUser()
 	return c.JSON(u)
 }
 

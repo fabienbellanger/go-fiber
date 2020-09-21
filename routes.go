@@ -1,6 +1,12 @@
 package main
 
 func (s *server) routes() {
+	// Login
+	// -----
+	s.router.Post("/login", s.handlerUserLogin)
+
+	// API v1
+	// ------
 	v1 := s.router.Group("/v1")
 
 	v1.Get("/", s.handlerHome)
@@ -12,10 +18,6 @@ func (s *server) routes() {
 	// ------------
 	users := v1.Group("/users")
 	users.Get("/", s.handlerGetUser)
-
-	// Login
-	// -----
-	s.router.Post("/login", s.handlerUserLogin)
 }
 
 func (s *server) protectedRoutes() {
