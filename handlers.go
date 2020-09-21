@@ -7,6 +7,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func (s *server) handlerStatic(c *fiber.Ctx) error {
+	return c.Render("index", fiber.Map{
+		"Title": "Hello, World!",
+	})
+}
+
 func (s *server) handlerHome(c *fiber.Ctx) error {
 	name := c.Params("name")
 	return c.SendString("Hello, " + name + " 👋!")

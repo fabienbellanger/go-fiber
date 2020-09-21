@@ -17,6 +17,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	jwtware "github.com/gofiber/jwt/v2"
+	"github.com/gofiber/template/html"
 	"github.com/spf13/viper"
 )
 
@@ -152,6 +153,9 @@ func (s *server) initJWT() {
 }
 
 func serverConfig() fiber.Config {
+	// Initialize standard Go html template engine
+	engine := html.New("./views", ".html")
+
 	return fiber.Config{
 		// Gestion des erreurs
 		// -------------------
@@ -181,6 +185,7 @@ func serverConfig() fiber.Config {
 		Prefork:               viper.GetBool("server.prefork"),
 		DisableStartupMessage: false,
 		StrictRouting:         true,
+		Views:                 engine,
 	}
 }
 
