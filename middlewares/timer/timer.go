@@ -35,10 +35,10 @@ var ConfigDefault = Config{
 	DisplaySeconds:      false,
 	DisplayMilliseconds: false,
 	DisplayHuman:        true,
-	Prefix:              "X-Process-Time",
+	Prefix:              "x-process-time",
 }
 
-// New creates a new middleware handler
+// New creates a new instance of middleware handler
 func New(config ...Config) func(*fiber.Ctx) error {
 	// Default configuration
 	cfg := ConfigDefault
@@ -58,14 +58,13 @@ func New(config ...Config) func(*fiber.Ctx) error {
 		c.Next()
 
 		duration := time.Since(now)
+
 		if cfg.DisplayHuman {
 			c.Set(cfg.Prefix, fmt.Sprintf("%v", duration))
 		}
-
 		if cfg.DisplayMilliseconds {
 			c.Set(cfg.Prefix+"-ms", fmt.Sprintf("%v", duration.Milliseconds()))
 		}
-
 		if cfg.DisplaySeconds {
 			c.Set(cfg.Prefix+"-sec", fmt.Sprintf("%v", duration.Seconds()))
 		}

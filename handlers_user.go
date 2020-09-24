@@ -18,6 +18,7 @@ func (s *server) handlerUserLogin(c *fiber.Ctx) error {
 	pass := c.FormValue("pass")
 
 	// Throws Unauthorized error
+	// TODO: Use databse instead
 	if user != "john" || pass != "doe" {
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}
