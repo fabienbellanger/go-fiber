@@ -41,6 +41,15 @@ func run() error {
 	}
 	defer server.store.close()
 
+	// Logger initialization
+	// ---------------------
+	logger, err := initLogger()
+	if err != nil {
+		return err
+	}
+	defer logger.Sync()
+	server.logger = logger
+
 	// HTTP server initialization
 	// --------------------------
 	err = server.router.Listen(fmt.Sprintf("%v:%v",

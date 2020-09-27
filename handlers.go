@@ -5,9 +5,11 @@ import (
 	"encoding/json"
 
 	"github.com/gofiber/fiber/v2"
+	"go.uber.org/zap"
 )
 
 func (s *server) handlerStatic(c *fiber.Ctx) error {
+	s.logger.Debug("Index route", zap.String("url", "https://www.google.com"))
 	return c.Render("index", fiber.Map{
 		"Title": "Hello, World!",
 	})

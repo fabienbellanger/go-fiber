@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"go.uber.org/zap"
+
 	"github.com/fabienbellanger/go-fiber/middlewares/timer"
 	"github.com/fabienbellanger/goutils"
 	"github.com/gofiber/fiber/v2"
@@ -25,6 +27,7 @@ type server struct {
 	store  store
 	router *fiber.App
 	mode   string
+	logger *zap.Logger
 }
 
 func newServer(mode string) *server {
