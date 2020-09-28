@@ -9,6 +9,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.0.3
 	github.com/gofiber/jwt/v2 v2.0.0
 	github.com/gofiber/template v1.6.2
+	github.com/gofiber/websocket/v2 v2.0.1
 	github.com/jmoiron/sqlx v1.2.1-0.20190826204134-d7d95172beb5
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.6.1

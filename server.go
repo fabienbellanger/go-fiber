@@ -38,6 +38,7 @@ func newServer(mode string) *server {
 
 	s.initHTTPServer()
 	s.routes()
+	s.websocketRoutes()
 	s.initPprof()
 	s.initJWT()
 	s.protectedRoutes()
