@@ -38,7 +38,7 @@ var ConfigDefault = Config{
 	Prefix:              "x-process-time",
 }
 
-// New creates a new instance of middleware handler
+// New creates a new instance of middleware handler.
 func New(config ...Config) func(*fiber.Ctx) error {
 	// Default configuration
 	cfg := ConfigDefault

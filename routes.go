@@ -36,7 +36,7 @@ func (s *server) protectedRoutes() {
 }
 
 func (s *server) websocketRoutes() {
-	ws := s.router.Group("/ws")
+	w := s.router.Group("/ws")
 
 	s.router.Use("/ws", func(c *fiber.Ctx) error {
 		// IsWebSocketUpgrade returns true if the client
@@ -50,9 +50,12 @@ func (s *server) websocketRoutes() {
 
 	// Access the websocket server: ws://localhost:8888/ws/123?v=1.0
 	// https://www.websocket.org/echo.html
-	ws.Get("/:id", websocket.New(func(c *websocket.Conn) {
+	w.Get("/:id", websocket.New(func(c *websocket.Conn) {
 		// c.Locals is added to the *websocket.Conn
 		log.Printf("allowed: %v, params: %v, query: %v\n", c.Locals("allowed"), c.Params("id"), c.Query("v"))
+
+		// cli := ws.New(c)
+		// cli.Connect()
 
 		var (
 			mt  int
