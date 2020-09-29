@@ -37,10 +37,7 @@ func (s *server) protectedRoutes() {
 	protected.Get("/test", s.handlerProtectedTest)
 }
 
-func (s *server) websocketRoutes() {
-	hub := ws.NewHub()
-	go hub.Run()
-
+func (s *server) websocketRoutes(hub *ws.Hub) {
 	w := s.router.Group("/ws")
 
 	s.router.Use("/ws", func(c *fiber.Ctx) error {
@@ -59,7 +56,7 @@ func (s *server) websocketRoutes() {
 		// c.Locals is added to the *websocket.Conn
 		log.Printf("allowed: %v, params: %v, query: %v\n", c.Locals("allowed"), c.Params("id"), c.Query("v"))
 
-		ws.ServeWs(hub, c.Conn)
+		ws.ServeWs(hub, c)
 
 		// cli := ws.New(c)
 		// cli.Connect()

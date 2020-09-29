@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/fabienbellanger/go-fiber/ws"
 	"github.com/spf13/viper"
 )
 
@@ -29,7 +30,12 @@ func initConfig() error {
 
 // run launches a server instance.
 func run() error {
-	server := newServer(viper.GetString("environment"))
+	// Hub for wbsockets broadcast
+	// ---------------------------
+	hub := ws.NewHub()
+	go hub.Run()
+
+	server := newServer(viper.GetString("environment"), hub)
 	log.Printf("Server in %s mode\n", server.mode)
 
 	// Database initialization

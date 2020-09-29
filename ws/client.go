@@ -1,7 +1,3 @@
-// Copyright 2013 The Gorilla WebSocket Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 package ws
 
 import (
@@ -9,7 +5,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/fasthttp/websocket"
+	// "github.com/fasthttp/websocket"
+	"github.com/gofiber/websocket/v2"
 )
 
 const (
@@ -31,10 +28,10 @@ var (
 	space   = []byte{' '}
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
+// var upgrader = websocket.Upgrader{
+// 	ReadBufferSize:  1024,
+// 	WriteBufferSize: 1024,
+// }
 
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
@@ -53,14 +50,13 @@ type Client struct {
 // ensures that there is at most one reader on a connection by executing all
 // reads from this goroutine.
 func (c *Client) readPump() {
-	log.Printf("conn=%#v\n", c.conn)
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
 	}()
-	// c.conn.SetReadLimit(maxMessageSize)
-	// c.conn.SetReadDeadline(time.Now().Add(pongWait))
-	// c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+	c.conn.SetReadLimit(maxMessageSize)
+	c.conn.SetReadDeadline(time.Now().Add(pongWait))
+	c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 		_, message, err := c.conn.ReadMessage()
 		if err != nil {
@@ -127,6 +123,6 @@ func ServeWs(hub *Hub, conn *websocket.Conn) {
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
-	go client.writePump()
 	go client.readPump()
+	client.writePump()
 }
