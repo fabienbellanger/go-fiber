@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 
+	"github.com/fabienbellanger/go-fiber/ws"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 )
@@ -36,6 +38,9 @@ func (s *server) protectedRoutes() {
 }
 
 func (s *server) websocketRoutes() {
+	hub := ws.NewHub()
+	go hub.Run()
+
 	w := s.router.Group("/ws")
 
 	s.router.Use("/ws", func(c *fiber.Ctx) error {
@@ -54,26 +59,28 @@ func (s *server) websocketRoutes() {
 		// c.Locals is added to the *websocket.Conn
 		log.Printf("allowed: %v, params: %v, query: %v\n", c.Locals("allowed"), c.Params("id"), c.Query("v"))
 
+		ws.ServeWs(hub, c.Conn)
+
 		// cli := ws.New(c)
 		// cli.Connect()
 
-		var (
-			mt  int
-			msg []byte
-			err error
-		)
-		for {
-			if mt, msg, err = c.ReadMessage(); err != nil {
-				log.Printf("[error] read: %v, type=%v, msg=%v", err, mt, msg)
-				break
-			}
+		// var (
+		// 	mt  int
+		// 	msg []byte
+		// 	err error
+		// )
+		// for {
+		// 	if mt, msg, err = c.ReadMessage(); err != nil {
+		// 		log.Printf("[error] read: %v, type=%v, msg=%v", err, mt, msg)
+		// 		break
+		// 	}
 
-			log.Printf("recv: type=%v, msg=%s", mt, msg)
+		// 	log.Printf("recv: type=%v, msg=%s", mt, msg)
 
-			if err = c.WriteMessage(mt, msg); err != nil {
-				log.Println("[error] write:", err)
-				break
-			}
-		}
+		// 	if err = c.WriteMessage(mt, msg); err != nil {
+		// 		log.Println("[error] write:", err)
+		// 		break
+		// 	}
+		// }
 	}))
 }
