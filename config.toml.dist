@@ -33,6 +33,7 @@ name = ""
 
 [debug]
 pprof = false
+monitor = false
 basicAuthUsername = ""
 basicAuthPassword = ""
 

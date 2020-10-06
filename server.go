@@ -16,6 +16,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
@@ -40,7 +41,7 @@ func newServer(mode string, hub *ws.Hub) *server {
 	s.initHTTPServer()
 	s.routes()
 	s.websocketRoutes(hub)
-	s.initPprof()
+	s.initTools()
 	s.initJWT()
 	s.protectedRoutes()
 
@@ -125,22 +126,25 @@ func (s *server) initHTTPServer() {
 	}
 }
 
-func (s *server) initPprof() {
+func (s *server) initTools() {
+	// Basic Auth
+	// ----------
+	cfg := basicauth.Config{
+		Users: map[string]string{
+			viper.GetString("debug.basicAuthUsername"): viper.GetString("debug.basicAuthPassword"),
+		},
+	}
+
 	if viper.GetBool("debug.pprof") {
 		private := s.router.Group("/debug/pprof")
-
-		// Basic Auth
-		// ----------
-		cfg := basicauth.Config{
-			Users: map[string]string{
-				viper.GetString("debug.basicAuthUsername"): viper.GetString("debug.basicAuthPassword"),
-			},
-		}
 		private.Use(basicauth.New(cfg))
-
-		// pprof (The handled paths all begin with /debug/pprof/)
-		// ------------------------------------------------------
 		s.router.Use(pprof.New())
+	}
+
+	if viper.GetBool("debug.monitor") {
+		tools := s.router.Group("tools")
+		tools.Use(basicauth.New(cfg))
+		tools.Get("/monitor", monitor.New())
 	}
 }
 
