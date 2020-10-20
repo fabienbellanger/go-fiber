@@ -6,10 +6,10 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fabienbellanger/goutils v1.0.14
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/gofiber/fiber/v2 v2.0.6
-	github.com/gofiber/jwt/v2 v2.0.0
-	github.com/gofiber/template v1.6.3
-	github.com/gofiber/websocket/v2 v2.0.1
+	github.com/gofiber/fiber/v2 v2.1.0
+	github.com/gofiber/jwt/v2 v2.0.1
+	github.com/gofiber/template v1.6.4
+	github.com/gofiber/websocket/v2 v2.0.2
 	github.com/jmoiron/sqlx v1.2.1-0.20190826204134-d7d95172beb5
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.6.1
