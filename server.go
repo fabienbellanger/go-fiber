@@ -142,7 +142,7 @@ func (s *server) initTools() {
 	}
 
 	if viper.GetBool("debug.monitor") {
-		tools := s.router.Group("tools")
+		tools := s.router.Group("/tools")
 		tools.Use(basicauth.New(cfg))
 		tools.Get("/monitor", monitor.New())
 	}
