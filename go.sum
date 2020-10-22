@@ -128,6 +128,8 @@ github.com/gobuffalo/syncx v0.0.0-20190224160051-33c29581e754/go.mod h1:HhnNqWY9
 github.com/gobwas/glob v0.2.3/go.mod h1:d3Ez4x06l9bZtSvzIay5+Yzi0fmZzPgnTbPcKjJAkT8=
 github.com/gofiber/fiber/v2 v2.1.0 h1:gvEQJDxVHFLY4bNb4HSu7nqVWeLeXry8P4tA4zPKfhQ=
 github.com/gofiber/fiber/v2 v2.1.0/go.mod h1:aG+lMkwy3LyVit4CnmYUbUdgjpc3UYOltvlJZ78rgQ0=
+github.com/gofiber/fiber/v2 v2.1.1 h1:2AAL5XUN1kXw8tt6p2xbZHZ9SLfSjl7pSgnIRGUkHjU=
+github.com/gofiber/fiber/v2 v2.1.1/go.mod h1:tpaJo8bDmDBffw1es3SugTtc6l7oC9EuVaAPe2vrNvE=
 github.com/gofiber/jwt/v2 v2.0.1 h1:TGSXQmcTQHY1lgdYPn34k+s1bn9TZ25uc3njQS7v+/Q=
 github.com/gofiber/jwt/v2 v2.0.1/go.mod h1:ylU2nJ6uUY+1sMPGIJYZGnfH7Vc/sOGkLuM9hlKCIrU=
 github.com/gofiber/template v1.6.4 h1:BA/qZs0s5Afksnmn9HGOip5BXZTdrFsQ3ijxYoYH+Yc=
