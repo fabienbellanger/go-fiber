@@ -24,7 +24,7 @@ update-all:
 	$(GOGET) -u all && $(GOMOD) tidy
 
 serve:
-	$(GORUN) .
+	$(GORUN) -race .
 
 build: 
 	$(GOBUILD) -o $(BINARY_NAME) -v
