@@ -16,6 +16,7 @@ type Hub struct {
 	unregister chan *Client
 }
 
+// NewHub returns a new Hub.
 func NewHub() *Hub {
 	return &Hub{
 		broadcast:  make(chan []byte),
@@ -25,6 +26,7 @@ func NewHub() *Hub {
 	}
 }
 
+// Run runs the hub.
 func (h *Hub) Run() {
 	for {
 		select {
