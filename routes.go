@@ -57,27 +57,5 @@ func (s *server) websocketRoutes(hub *ws.Hub) {
 		log.Printf("allowed: %v, params: %v, query: %v\n", c.Locals("allowed"), c.Params("id"), c.Query("v"))
 
 		ws.ServeWs(hub, c)
-
-		// cli := ws.New(c)
-		// cli.Connect()
-
-		// var (
-		// 	mt  int
-		// 	msg []byte
-		// 	err error
-		// )
-		// for {
-		// 	if mt, msg, err = c.ReadMessage(); err != nil {
-		// 		log.Printf("[error] read: %v, type=%v, msg=%v", err, mt, msg)
-		// 		break
-		// 	}
-
-		// 	log.Printf("recv: type=%v, msg=%s", mt, msg)
-
-		// 	if err = c.WriteMessage(mt, msg); err != nil {
-		// 		log.Println("[error] write:", err)
-		// 		break
-		// 	}
-		// }
 	}))
 }
