@@ -81,12 +81,19 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 }
 
 func (s *server) handlerGithub(c *fiber.Ctx) error {
-	var project models.Project
-	project.New("actix-web", "actix/actix-web")
-
-	release, err := project.GetInformation()
+	projects, err := models.LoadProjectsFromFile("projects.json")
 	if err != nil {
-		return nil
+		return err
+	}
+
+	// Version non concurrente
+	// -----------------------
+	releases := make([]models.Release, 0)
+	for _, project := range projects {
+		release, err := project.GetInformation()
+		if err == nil {
+			releases = append(releases, release)
+		}
 	}
 
 	// Pour le pool de workers
@@ -95,5 +102,5 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 	// https://brandur.org/go-worker-pool
 	// https://medium.com/@j.d.livni/write-a-go-worker-pool-in-15-minutes-c9b42f640923
 
-	return c.JSON(&release)
+	return c.JSON(&releases)
 }

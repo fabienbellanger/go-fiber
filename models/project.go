@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/spf13/viper"
 )
@@ -13,12 +14,6 @@ import (
 type Project struct {
 	Name string `json:"name"`
 	URL  string `json:"url"`
-}
-
-// New initializes a new project.
-func (p *Project) New(name, url string) {
-	p.Name = name
-	p.URL = url
 }
 
 // GetInformation calls Github API to access last release information.
@@ -51,4 +46,27 @@ func (p *Project) GetInformation() (Release, error) {
 		return release, err
 	}
 	return release, nil
+}
+
+// LoadProjectsFromFile loads projects from JSON file.
+func LoadProjectsFromFile(file string) ([]Project, error) {
+	projects := make([]Project, 0)
+
+	// Ouverture du fichier
+	// --------------------
+	f, err := os.Open(file)
+	if err != nil {
+		return projects, err
+	}
+	defer f.Close()
+
+	// Lecture du fichier
+	// ------------------
+	b, _ := ioutil.ReadAll(f)
+
+	// Parse du fichier JSON
+	// ---------------------
+	json.Unmarshal(b, &projects)
+
+	return projects, nil
 }
