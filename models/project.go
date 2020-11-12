@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 
 	"github.com/spf13/viper"
 )
@@ -39,7 +38,7 @@ func (p *Project) GetInformation() (Release, error) {
 		return release, err
 	}
 
-	// Recupération de la dernière release
+	// Récupération de la dernière release
 	// -----------------------------------
 	err = json.Unmarshal(bodyText, &release)
 	if err != nil {
@@ -52,21 +51,14 @@ func (p *Project) GetInformation() (Release, error) {
 func LoadProjectsFromFile(file string) ([]Project, error) {
 	projects := make([]Project, 0)
 
-	// Ouverture du fichier
-	// --------------------
-	f, err := os.Open(file)
+	content, err := ioutil.ReadFile(file)
 	if err != nil {
 		return projects, err
 	}
-	defer f.Close()
 
-	// Lecture du fichier
-	// ------------------
-	b, _ := ioutil.ReadAll(f)
-
-	// Parse du fichier JSON
-	// ---------------------
-	json.Unmarshal(b, &projects)
-
+	err = json.Unmarshal(content, &projects)
+	if err != nil {
+		return projects, err
+	}
 	return projects, nil
 }
