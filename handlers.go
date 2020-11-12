@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
+	"runtime"
 
 	"github.com/fabienbellanger/go-fiber/models"
 	"github.com/gofiber/fiber/v2"
@@ -95,6 +97,11 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 			releases = append(releases, release)
 		}
 	}
+
+	// Version concurrente
+	// -------------------
+	numCPU := runtime.NumCPU()
+	fmt.Printf("NumCPU=%v\n", numCPU)
 
 	// Pour le pool de workers
 	// https://www.prakharsrivastav.com/posts/golang-concurrent-worker-pool/
