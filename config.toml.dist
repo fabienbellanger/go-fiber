@@ -39,3 +39,8 @@ basicAuthPassword = ""
 
 [jwt]
 secret = "mySecretKeyForJWT"
+
+[github]
+apiBaseURL = "https://api.github.com"
+apiUsername = ""
+apiToken = ""

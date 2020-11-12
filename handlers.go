@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 
+	"github.com/fabienbellanger/go-fiber/models"
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"
 )
@@ -77,4 +78,16 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 	})
 
 	return nil
+}
+
+func (s *server) handlerGithub(c *fiber.Ctx) error {
+	var project models.Project
+	project.New("actix-web", "actix/actix-web")
+
+	release, err := project.GetInformation()
+	if err != nil {
+		return nil
+	}
+
+	return c.JSON(&release)
 }
