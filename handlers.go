@@ -89,5 +89,10 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 		return nil
 	}
 
+	// Pour le pool de workers
+	// https://www.prakharsrivastav.com/posts/golang-concurrent-worker-pool/
+	// https://brandur.org/go-worker-pool
+	// https://medium.com/@j.d.livni/write-a-go-worker-pool-in-15-minutes-c9b42f640923
+
 	return c.JSON(&release)
 }
