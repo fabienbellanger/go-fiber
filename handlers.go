@@ -74,7 +74,7 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 				w.WriteString(",")
 			}
 
-			// w.Flush()
+			w.Flush()
 		}
 		w.WriteString("]")
 	})
