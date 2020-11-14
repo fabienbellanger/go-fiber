@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
 	"runtime"
 	"sync"
 
@@ -119,7 +118,6 @@ func (s *server) handlerGithubAsync(c *fiber.Ctx) error {
 
 	// Lancement des workers
 	// ---------------------
-	fmt.Printf("Starting %d workers...\n", numWorkers)
 	var wg sync.WaitGroup
 	for i := 0; i < numWorkers; i++ {
 		wg.Add(1)
