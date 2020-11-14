@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"runtime"
+	"sync"
 
 	"github.com/fabienbellanger/go-fiber/models"
 	"github.com/gofiber/fiber/v2"
@@ -88,8 +89,6 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 		return err
 	}
 
-	// Version non concurrente
-	// -----------------------
 	releases := make([]models.Release, 0)
 	for _, project := range projects {
 		release, err := project.GetInformation()
@@ -98,16 +97,60 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 		}
 	}
 
-	// Version concurrente
-	// -------------------
-	numCPU := runtime.NumCPU()
-	fmt.Printf("NumCPU=%v\n", numCPU)
+	return c.JSON(&releases)
+}
 
-	// Pour le pool de workers
-	// https://www.prakharsrivastav.com/posts/golang-concurrent-worker-pool/
-	// --> https://github.com/PrakharSrivastav/workers
-	// https://brandur.org/go-worker-pool
-	// https://medium.com/@j.d.livni/write-a-go-worker-pool-in-15-minutes-c9b42f640923
+func (s *server) handlerGithubAsync(c *fiber.Ctx) error {
+	projects, err := models.LoadProjectsFromFile("projects.json")
+	if err != nil {
+		return err
+	}
+
+	numProjects := len(projects)
+	jobs := make(chan models.Project, numProjects)
+	results := make(chan models.Release, numProjects)
+
+	// Nombre de workers
+	// -----------------
+	numWorkers := runtime.NumCPU()
+	if numProjects < numWorkers {
+		numWorkers = numProjects
+	}
+
+	// Lancement des workers
+	// ---------------------
+	fmt.Printf("Starting %d workers...\n", numWorkers)
+	var wg sync.WaitGroup
+	for i := 0; i < numWorkers; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			models.ReleaseWorker(jobs, results)
+		}()
+	}
+
+	// Fermeture du channel results quand tous les workers ont terminés
+	// ----------------------------------------------------------------
+	go func() {
+		defer close(results)
+		wg.Wait()
+	}()
+
+	// Envoi des jobs
+	// --------------
+	go func() {
+		defer close(jobs)
+		for _, project := range projects {
+			jobs <- project
+		}
+	}()
+
+	// Traitement des résultats
+	// ------------------------
+	releases := make([]models.Release, 0)
+	for r := range results {
+		releases = append(releases, r)
+	}
 
 	return c.JSON(&releases)
 }

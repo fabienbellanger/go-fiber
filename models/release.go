@@ -9,3 +9,12 @@ type Release struct {
 	CreatedAt   string `json:"created_at"`
 	PublishedAt string `json:"published_at"`
 }
+
+func ReleaseWorker(jobs <-chan Project, results chan<- Release) {
+	for project := range jobs {
+		release, err := project.GetInformation()
+		if err == nil {
+			results <- release
+		}
+	}
+}

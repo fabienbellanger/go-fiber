@@ -25,6 +25,7 @@ func (s *server) routes() {
 	v1.Get("/json", s.handlerBigJSON)
 	v1.Get("/json-stream", s.handlerBigJSONStream)
 	v1.Get("/github", s.handlerGithub)
+	v1.Get("/github-async", s.handlerGithubAsync)
 
 	// Users routes
 	// ------------

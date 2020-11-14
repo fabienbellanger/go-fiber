@@ -77,11 +77,12 @@ func (s *server) initHTTPServer() {
 	// ------
 	if s.mode != "production" {
 		s.router.Use(logger.New(logger.Config{
-			Next:       nil,
-			Format:     "[${time}] ${status} - ${latency} - ${method} ${path}\n",
-			TimeFormat: "2006-01-02 15:04:05",
-			TimeZone:   "Local",
-			Output:     os.Stderr,
+			Next:         nil,
+			Format:       "[${time}] ${status} - ${latency} - ${method} ${path}\n",
+			TimeFormat:   "2006-01-02 15:04:05",
+			TimeZone:     "Local",
+			TimeInterval: 500,
+			Output:       os.Stderr,
 		}))
 	}
 
