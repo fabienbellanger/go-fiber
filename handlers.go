@@ -88,23 +88,6 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 		return err
 	}
 
-	releases := make([]models.Release, 0)
-	for _, project := range projects {
-		release, err := project.GetInformation()
-		if err == nil {
-			releases = append(releases, release)
-		}
-	}
-
-	return c.JSON(&releases)
-}
-
-func (s *server) handlerGithubAsync(c *fiber.Ctx) error {
-	projects, err := models.LoadProjectsFromFile("projects.json")
-	if err != nil {
-		return err
-	}
-
 	numProjects := len(projects)
 	jobs := make(chan models.Project, numProjects)
 	results := make(chan models.Release, numProjects)

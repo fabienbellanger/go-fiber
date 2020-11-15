@@ -10,6 +10,7 @@ type Release struct {
 	PublishedAt string `json:"published_at"`
 }
 
+// ReleaseWorker starts worker to get project latest release.
 func ReleaseWorker(jobs <-chan Project, results chan<- Release) {
 	for project := range jobs {
 		release, err := project.GetInformation()

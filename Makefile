@@ -24,6 +24,9 @@ update-all:
 	$(GOGET) -u all && $(GOMOD) tidy
 
 serve:
+	$(GORUN) .
+
+serve-race:
 	$(GORUN) -race .
 
 build: 
