@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"time"
@@ -174,7 +175,6 @@ func serverConfig() fiber.Config {
 
 			// Retreive the custom statuscode if it's an fiber.*Error
 			e, ok := err.(*fiber.Error)
-
 			if ok {
 				code = e.Code
 			}
@@ -184,6 +184,10 @@ func serverConfig() fiber.Config {
 			}
 
 			if code == fiber.StatusInternalServerError {
+				// TODO: Logger l'erreur
+				log.Printf("Error: %v\n", err)
+
+				// TODO: Retourner une erreur 500 plutôt qu'une 200
 				return c.JSON(fiber.Map{
 					"code":    code,
 					"message": "Internal Server Error",

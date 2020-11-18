@@ -3,8 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"runtime"
-	"sync"
+	"time"
 
 	"github.com/fabienbellanger/go-fiber/models"
 	"github.com/gofiber/fiber/v2"
@@ -88,50 +87,18 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 		return err
 	}
 
-	numProjects := len(projects)
-	jobs := make(chan models.Project, numProjects)
-	results := make(chan models.Release, numProjects)
-
-	// Nombre de workers
-	// -----------------
-	numWorkers := runtime.NumCPU()
-	if numProjects < numWorkers {
-		numWorkers = numProjects
-	}
-
-	// Lancement des workers
-	// ---------------------
-	var wg sync.WaitGroup
-	for i := 0; i < numWorkers; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			models.ReleaseWorker(jobs, results)
-		}()
-	}
-
-	// Fermeture du channel results quand tous les workers ont terminés
-	// ----------------------------------------------------------------
-	go func() {
-		defer close(results)
-		wg.Wait()
-	}()
-
-	// Envoi des jobs
-	// --------------
-	go func() {
-		defer close(jobs)
-		for _, project := range projects {
-			jobs <- project
+	models.CachedReleases.Mux.Lock()
+	defer models.CachedReleases.Mux.Unlock()
+	now := time.Now()
+	if len(models.CachedReleases.Releases) == 0 || models.CachedReleases.ExpireAt.Before(now) {
+		releases, err := models.ReleasesProcess(projects)
+		if err != nil {
+			return err
 		}
-	}()
 
-	// Traitement des résultats
-	// ------------------------
-	releases := make([]models.Release, 0)
-	for r := range results {
-		releases = append(releases, r)
+		models.CachedReleases.Releases = releases
+		models.CachedReleases.ExpireAt = now.Local().Add(time.Hour)
 	}
 
-	return c.JSON(&releases)
+	return c.JSON(&models.CachedReleases.Releases)
 }
