@@ -187,8 +187,7 @@ func serverConfig() fiber.Config {
 				// TODO: Logger l'erreur
 				log.Printf("Error: %v\n", err)
 
-				// TODO: Retourner une erreur 500 plutôt qu'une 200
-				return c.JSON(fiber.Map{
+				return c.Status(code).JSON(fiber.Map{
 					"code":    code,
 					"message": "Internal Server Error",
 				})
