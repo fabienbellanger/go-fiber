@@ -16,13 +16,16 @@ type Release struct {
 	PublishedAt string `json:"published_at"`
 }
 
-type ReleasesCache struct {
-	Releases []Release
-	ExpireAt time.Time
-	Mux      sync.RWMutex
+type releasesCache struct {
+	releases []Release
+	expireAt time.Time
+	mux      sync.RWMutex
 }
 
-var CachedReleases ReleasesCache = ReleasesCache{}
+var (
+	// Used to cached Github response
+	cachedReleases releasesCache = releasesCache{}
+)
 
 // releaseWorker starts worker to get project latest release.
 func releaseWorker(jobs <-chan Project, results chan<- Release) {
@@ -34,8 +37,8 @@ func releaseWorker(jobs <-chan Project, results chan<- Release) {
 	}
 }
 
-// ReleasesProcess find all projects latest release.
-func ReleasesProcess(projects []Project) ([]Release, error) {
+// getLatestReleases find all projects latest release.
+func getLatestReleases(projects []Project) ([]Release, error) {
 	numProjects := len(projects)
 	jobs := make(chan Project, numProjects)
 	results := make(chan Release, numProjects)
@@ -82,4 +85,21 @@ func ReleasesProcess(projects []Project) ([]Release, error) {
 	}
 
 	return releases, nil
+}
+
+// ReleasesProcess returns latest releases.
+func ReleasesProcess(projects []Project) ([]Release, error) {
+	cachedReleases.mux.Lock()
+	defer cachedReleases.mux.Unlock()
+	now := time.Now()
+	if len(cachedReleases.releases) == 0 || cachedReleases.expireAt.Before(now) {
+		r, err := getLatestReleases(projects)
+		if err != nil {
+			return r, err
+		}
+
+		cachedReleases.releases = r
+		cachedReleases.expireAt = now.Local().Add(time.Hour)
+	}
+	return cachedReleases.releases, nil
 }

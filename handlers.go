@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"time"
 
 	"github.com/fabienbellanger/go-fiber/models"
 	"github.com/gofiber/fiber/v2"
@@ -87,18 +86,10 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 		return err
 	}
 
-	models.CachedReleases.Mux.Lock()
-	defer models.CachedReleases.Mux.Unlock()
-	now := time.Now()
-	if len(models.CachedReleases.Releases) == 0 || models.CachedReleases.ExpireAt.Before(now) {
-		releases, err := models.ReleasesProcess(projects)
-		if err != nil {
-			return err
-		}
-
-		models.CachedReleases.Releases = releases
-		models.CachedReleases.ExpireAt = now.Local().Add(time.Hour)
+	releases, err := models.ReleasesProcess(projects)
+	if err != nil {
+		return err
 	}
 
-	return c.JSON(&models.CachedReleases.Releases)
+	return c.JSON(&releases)
 }
