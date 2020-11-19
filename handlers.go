@@ -86,7 +86,7 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 		return err
 	}
 
-	releases, err := models.ReleasesProcess(projects)
+	releases, err := models.GetReleases(projects)
 	if err != nil {
 		return err
 	}

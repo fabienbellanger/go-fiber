@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"runtime"
 	"sync"
@@ -40,8 +41,12 @@ var (
 	cachedReleases releasesCache = releasesCache{}
 )
 
-// GetInformation calls Github API to access last release information.
-func (p *Project) GetInformation() (Release, error) {
+func (p Project) String() string {
+	return fmt.Sprintf("%s (%s)", p.Name, p.Repo)
+}
+
+// info calls Github API to access last release information.
+func (p *Project) info() (Release, error) {
 	url := fmt.Sprintf("%s/repos/%s/releases/latest", viper.GetString("github.apiBaseURL"), p.Repo)
 
 	var release Release
@@ -58,6 +63,13 @@ func (p *Project) GetInformation() (Release, error) {
 	if err != nil {
 		return release, err
 	}
+
+	// Si status code != 200, on retourne une erreur
+	// ---------------------------------------------
+	if resp.StatusCode != http.StatusOK {
+		return release, fmt.Errorf("error during retrieving Github %s project: status code=%d", *p, resp.StatusCode)
+	}
+
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return release, err
@@ -96,9 +108,11 @@ func LoadProjectsFromFile(file string) ([]Project, error) {
 // releaseWorker starts worker to get project latest release.
 func releaseWorker(jobs <-chan Project, results chan<- Release) {
 	for project := range jobs {
-		release, err := project.GetInformation()
+		release, err := project.info()
 		if err == nil {
 			results <- release
+		} else {
+			log.Printf("%v\n", err)
 		}
 	}
 }
@@ -153,8 +167,8 @@ func getLatestReleases(projects []Project) ([]Release, error) {
 	return releases, nil
 }
 
-// ReleasesProcess returns latest releases.
-func ReleasesProcess(projects []Project) ([]Release, error) {
+// GetReleases returns latest release of Github projects.
+func GetReleases(projects []Project) ([]Release, error) {
 	cachedReleases.mux.Lock()
 	defer cachedReleases.mux.Unlock()
 	now := time.Now()
