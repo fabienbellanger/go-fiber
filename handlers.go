@@ -83,6 +83,7 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 func (s *server) handlerGithub(c *fiber.Ctx) error {
 	projects, err := models.LoadProjectsFromFile("projects.json")
 	if err != nil {
+		s.logger.Error("Load Github projects file", zap.String("file", "projects.json"))
 		return err
 	}
 
