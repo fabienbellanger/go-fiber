@@ -15,6 +15,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
@@ -23,6 +24,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	jwtware "github.com/gofiber/jwt/v2"
 	"github.com/gofiber/template/html"
+	"github.com/markbates/pkger"
 	"github.com/spf13/viper"
 )
 
@@ -126,6 +128,12 @@ func (s *server) initHTTPServer() {
 			},
 		}))
 	}
+
+	// Pkger
+	// -----
+	s.router.Use("/public", filesystem.New(filesystem.Config{
+		Root: pkger.Dir("/public"),
+	}))
 }
 
 func (s *server) initTools() {
@@ -165,7 +173,7 @@ func (s *server) initJWT() {
 
 func serverConfig() fiber.Config {
 	// Initialize standard Go html template engine
-	engine := html.New("./views", ".html")
+	engine := html.New("./public/views", ".html")
 
 	return fiber.Config{
 		// Gestion des erreurs
