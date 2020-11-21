@@ -6,7 +6,6 @@ import (
 
 	"github.com/fabienbellanger/go-fiber/models"
 	"github.com/gofiber/fiber/v2"
-	"go.uber.org/zap"
 )
 
 func (s *server) handlerStatic(c *fiber.Ctx) error {
@@ -80,13 +79,7 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 }
 
 func (s *server) handlerGithub(c *fiber.Ctx) error {
-	projects, err := models.LoadProjectsFromFile("projects.json")
-	if err != nil {
-		s.logger.Error("Load Github projects file", zap.String("file", "projects.json"))
-		return err
-	}
-
-	releases, err := models.GetReleases(projects)
+	releases, err := models.GetReleases()
 	if err != nil {
 		return err
 	}

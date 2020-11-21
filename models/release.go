@@ -31,6 +31,7 @@ type Release struct {
 }
 
 type releasesCache struct {
+	projects []Project
 	releases []Release
 	expireAt time.Time
 	mux      sync.RWMutex
@@ -168,16 +169,23 @@ func getLatestReleases(projects []Project) ([]Release, error) {
 }
 
 // GetReleases returns latest release of Github projects.
-func GetReleases(projects []Project) ([]Release, error) {
+func GetReleases() ([]Release, error) {
 	cachedReleases.mux.Lock()
 	defer cachedReleases.mux.Unlock()
+
 	now := time.Now()
 	if len(cachedReleases.releases) == 0 || cachedReleases.expireAt.Before(now) {
+		projects, err := LoadProjectsFromFile("projects.json")
+		if err != nil {
+			return cachedReleases.releases, err
+		}
+
 		r, err := getLatestReleases(projects)
 		if err != nil {
 			return r, err
 		}
 
+		cachedReleases.projects = projects
 		cachedReleases.releases = r
 		cachedReleases.expireAt = now.Local().Add(time.Hour)
 	}
