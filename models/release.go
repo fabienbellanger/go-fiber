@@ -90,8 +90,8 @@ func (p *Project) info() (Release, error) {
 	return release, nil
 }
 
-// LoadProjectsFromFile loads projects from JSON file.
-func LoadProjectsFromFile(file string) ([]Project, error) {
+// loadProjectsFromFile loads projects from JSON file.
+func loadProjectsFromFile(file string) ([]Project, error) {
 	projects := make([]Project, 0)
 
 	content, err := ioutil.ReadFile(file)
@@ -175,7 +175,7 @@ func GetReleases() ([]Release, error) {
 
 	now := time.Now()
 	if len(cachedReleases.releases) == 0 || cachedReleases.expireAt.Before(now) {
-		projects, err := LoadProjectsFromFile("projects.json")
+		projects, err := loadProjectsFromFile("projects.json")
 		if err != nil {
 			return cachedReleases.releases, err
 		}
