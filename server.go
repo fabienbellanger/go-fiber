@@ -42,6 +42,12 @@ func newServer(mode string, hub *ws.Hub) *server {
 	}
 
 	s.initHTTPServer()
+
+	// Pkger
+	// -----
+	s.router.Use("/public", filesystem.New(filesystem.Config{
+		Root: pkger.Dir("/public"),
+	}))
 	s.routes()
 	s.websocketRoutes(hub)
 	s.initTools()
@@ -128,12 +134,6 @@ func (s *server) initHTTPServer() {
 			},
 		}))
 	}
-
-	// Pkger
-	// -----
-	s.router.Use("/public", filesystem.New(filesystem.Config{
-		Root: pkger.Dir("/public"),
-	}))
 }
 
 func (s *server) initTools() {
