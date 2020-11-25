@@ -45,8 +45,8 @@ func newServer(mode string, hub *ws.Hub) *server {
 
 	// Pkger
 	// -----
-	s.router.Use("/public", filesystem.New(filesystem.Config{
-		Root: pkger.Dir("/public"),
+	s.router.Use("/assets", filesystem.New(filesystem.Config{
+		Root: pkger.Dir("/public/assets"),
 	}))
 	s.routes()
 	s.websocketRoutes(hub)
@@ -106,8 +106,9 @@ func (s *server) initHTTPServer() {
 	// Timer
 	// -----
 	s.router.Use(timer.New(timer.Config{
-		DisplayMilliseconds: true,
-		DisplayHuman:        true,
+		DisplayMilliseconds: false,
+		DisplayHuman:        false,
+		DisplaySeconds:      true,
 	}))
 
 	// Limiter
@@ -173,7 +174,7 @@ func (s *server) initJWT() {
 
 func serverConfig() fiber.Config {
 	// Initialize standard Go html template engine
-	engine := html.New("./public/views", ".html")
+	engine := html.NewFileSystem(pkger.Dir("/public/views"), ".html")
 
 	return fiber.Config{
 		// Gestion des erreurs
