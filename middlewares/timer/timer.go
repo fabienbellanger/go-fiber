@@ -7,8 +7,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// TODO: Ne semble pas fonctionner correctement...
-
 // Config defines the configuration for middleware.
 type Config struct {
 	// DisplaySeconds indicates the process time in seconds.
