@@ -13,18 +13,13 @@ import (
 type Config struct {
 	// DisplaySeconds indicates the process time in seconds.
 	//
-	// Optional. Default value false.
+	// Optional. Default value true.
 	DisplaySeconds bool
 
 	// DisplayMilliseconds indicates the process time in milliseconds.
 	//
 	// Optional. Default value false.
 	DisplayMilliseconds bool
-
-	// DisplayHuman indicates the process time in human format.
-	//
-	// Optional. Default value true.
-	DisplayHuman bool
 
 	// Prefix indicates prefix for header name.
 	//
@@ -34,9 +29,8 @@ type Config struct {
 
 // ConfigDefault is the default configuration.
 var ConfigDefault = Config{
-	DisplaySeconds:      false,
+	DisplaySeconds:      true,
 	DisplayMilliseconds: false,
-	DisplayHuman:        true,
 	Prefix:              "x-process-time",
 }
 
@@ -60,15 +54,11 @@ func New(config ...Config) func(*fiber.Ctx) error {
 		c.Next()
 
 		duration := time.Since(now)
-
-		if cfg.DisplayHuman {
-			c.Set(cfg.Prefix, fmt.Sprintf("%v", duration))
-		}
 		if cfg.DisplayMilliseconds {
-			c.Set(cfg.Prefix+"-ms", fmt.Sprintf("%v", duration.Milliseconds()))
+			c.Set(cfg.Prefix+"-ms", fmt.Sprintf("%d", duration.Milliseconds()))
 		}
 		if cfg.DisplaySeconds {
-			c.Set(cfg.Prefix+"-sec", fmt.Sprintf("%v", duration.Seconds()))
+			c.Set(cfg.Prefix+"-sec", fmt.Sprintf("%.6f", duration.Seconds()))
 		}
 
 		return nil

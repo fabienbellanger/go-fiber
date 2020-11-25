@@ -106,8 +106,7 @@ func (s *server) initHTTPServer() {
 	// Timer
 	// -----
 	s.router.Use(timer.New(timer.Config{
-		DisplayMilliseconds: false,
-		DisplayHuman:        false,
+		DisplayMilliseconds: true,
 		DisplaySeconds:      true,
 	}))
 
