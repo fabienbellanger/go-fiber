@@ -16,6 +16,10 @@ func (s *server) routes() {
 	// -----
 	s.router.Post("/login", s.handlerUserLogin)
 
+	// Github projects
+	// ---------------
+	s.router.Get("releases", s.handlerReleases)
+
 	// API v1
 	// ------
 	v1 := s.router.Group("/v1")

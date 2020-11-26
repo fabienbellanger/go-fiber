@@ -11,6 +11,7 @@ GOTOOL=$(GOCMD) tool
 BINARY_NAME=go-fiber
 BINARY_UNIX=$(BINARY_NAME)_unix
 DOCKER_COMPOSE=docker-compose
+PKGER=pkger
 
 all: test build
 
@@ -24,12 +25,15 @@ update-all:
 	$(GOGET) -u all && $(GOMOD) tidy
 
 serve:
+	$(PKGER)
 	$(GORUN) .
 
 serve-race:
+	$(PKGER)
 	$(GORUN) -race .
 
 build: 
+	$(PKGER)
 	$(GOBUILD) -o $(BINARY_NAME) -v
 
 test: 

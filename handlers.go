@@ -86,3 +86,7 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 
 	return c.JSON(&releases)
 }
+
+func (s *server) handlerReleases(c *fiber.Ctx) error {
+	return c.Render("github/index", fiber.Map{})
+}
