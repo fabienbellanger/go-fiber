@@ -39,6 +39,7 @@ serve-race:
 build: 
 	$(PKGER)
 	$(GOBUILD) -o $(BINARY_NAME) -v
+	rm $(PKGER_FILE)
 
 test: 
 	$(GOTEST) -cover -v ./...

@@ -10,8 +10,6 @@ import (
 )
 
 func (s *server) routes() {
-	s.router.Get("static", s.handlerStatic)
-
 	// Login
 	// -----
 	s.router.Post("/login", s.handlerUserLogin)

@@ -23,7 +23,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	jwtware "github.com/gofiber/jwt/v2"
-	"github.com/gofiber/template/html"
+	"github.com/gofiber/template/django"
 	"github.com/markbates/pkger"
 	"github.com/spf13/viper"
 )
@@ -173,7 +173,8 @@ func (s *server) initJWT() {
 
 func serverConfig() fiber.Config {
 	// Initialize standard Go html template engine
-	engine := html.NewFileSystem(pkger.Dir("/public/views"), ".html")
+	// engine := html.NewFileSystem(pkger.Dir("/public/views"), ".html")
+	engine := django.NewFileSystem(pkger.Dir("/public/views"), ".django")
 
 	return fiber.Config{
 		// Gestion des erreurs
