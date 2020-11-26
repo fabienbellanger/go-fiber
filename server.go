@@ -181,6 +181,8 @@ func serverConfig() fiber.Config {
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
 			code := fiber.StatusInternalServerError
 
+			log.Printf("%+v\n", err)
+
 			// Retreive the custom statuscode if it's an fiber.*Error
 			e, ok := err.(*fiber.Error)
 			if ok {

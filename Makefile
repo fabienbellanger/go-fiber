@@ -12,6 +12,7 @@ BINARY_NAME=go-fiber
 BINARY_UNIX=$(BINARY_NAME)_unix
 DOCKER_COMPOSE=docker-compose
 PKGER=pkger
+PKGER_FILE=pkged.go
 
 all: test build
 
@@ -25,6 +26,9 @@ update-all:
 	$(GOGET) -u all && $(GOMOD) tidy
 
 serve:
+	$(GORUN) .
+
+serve-pkger:
 	$(PKGER)
 	$(GORUN) .
 

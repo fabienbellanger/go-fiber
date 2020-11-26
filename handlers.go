@@ -88,5 +88,14 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 }
 
 func (s *server) handlerReleases(c *fiber.Ctx) error {
-	return c.Render("github/index", fiber.Map{})
+	releases, err := models.GetReleases()
+	if err != nil {
+		return err
+	}
+
+	// TODO: Essayer : https://github.com/flosch/pongo2
+	return c.Render("github/index", fiber.Map{
+		"releases":   releases,
+		"nbReleases": len(releases),
+	})
 }
