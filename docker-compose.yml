@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: gofiber-api
+    build: .
+    ports: 
+      - "8888:8888"
+    restart: on-failure
+    depends_on:
+      - mysql
+    networks:
+      - bridge
+
+  mysql:
+    container_name: gofiber-mysql
+    image: mysql:5.7
+    restart: on-failure
+    volumes:
+      - data_mysql:/var/lib/mysql:delegated
+    environment:
+      - MYSQL_DATABASE=go-fiber
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    networks:
+      - bridge
+
+networks:
+  bridge:
+    driver: bridge
+
+volumes:
+  data_mysql:
+    driver: local
