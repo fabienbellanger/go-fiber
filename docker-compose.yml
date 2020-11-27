@@ -12,17 +12,16 @@ services:
     networks:
       - bridge
 
+  # la connexion ne fonctionne pas !
   mysql:
     container_name: gofiber-mysql
     image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
     restart: on-failure
     volumes:
       - data_mysql:/var/lib/mysql:delegated
     environment:
-      - MYSQL_DATABASE=go-fiber
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      MYSQL_ROOT_PASSWORD: root
     networks:
       - bridge
 

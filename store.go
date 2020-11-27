@@ -24,6 +24,12 @@ type dbStore struct {
 }
 
 func (s *dbStore) open() error {
+	log.Printf("%s\n", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+		viper.GetString("database.username"),
+		viper.GetString("database.password"),
+		viper.GetString("database.host"),
+		viper.GetInt("database.port"),
+		viper.GetString("database.name")))
 	db, err := sqlx.Connect("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
 		viper.GetString("database.username"),
 		viper.GetString("database.password"),
