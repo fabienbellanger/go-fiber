@@ -173,8 +173,7 @@ func (s *server) initJWT() {
 
 func serverConfig() fiber.Config {
 	// Initialize standard Go html template engine
-	// engine := html.NewFileSystem(pkger.Dir("/public/views"), ".html")
-	engine := django.NewFileSystem(pkger.Dir("/public/views"), ".django")
+	engine := django.NewFileSystem(pkger.Dir("/public/templates"), ".django")
 
 	return fiber.Config{
 		// Gestion des erreurs

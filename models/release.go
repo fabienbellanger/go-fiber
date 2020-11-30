@@ -15,8 +15,9 @@ import (
 
 // Project represents a Github project.
 type Project struct {
-	Name string `json:"name"`
-	Repo string `json:"repo"`
+	Name     string `json:"name"`
+	Repo     string `json:"repo"`
+	Language string `json:"language"`
 }
 
 // Release represents release information from Github
@@ -43,7 +44,7 @@ var (
 )
 
 func (p Project) String() string {
-	return fmt.Sprintf("%s (%s)", p.Name, p.Repo)
+	return fmt.Sprintf("[%s] %s (%s)", p.Language, p.Name, p.Repo)
 }
 
 // info calls Github API to access last release information.

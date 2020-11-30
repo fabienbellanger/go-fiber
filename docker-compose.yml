@@ -6,13 +6,14 @@ services:
     build: .
     ports: 
       - "8888:8888"
+    expose:
+      - "8888"
     restart: on-failure
     depends_on:
       - mysql
     networks:
       - fiber-bridge
 
-  # la connexion ne fonctionne pas !
   mysql:
     container_name: fiber-mysql
     image: mysql:5.7
@@ -21,6 +22,7 @@ services:
     volumes:
       - fiber-data_mysql:/var/lib/mysql:delegated
     environment:
+      MYSQL_DATABASE: pos-v2
       MYSQL_ROOT_PASSWORD: root
     networks:
       - fiber-bridge

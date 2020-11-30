@@ -11,7 +11,7 @@
     </head>
 
     <body>
-        <div class="container-fluid my-3">
+        <div class="container my-3">
             <h1 class="mb-4">Projects list</h1>
 
             {% if nbReleases == 0 %}
@@ -21,15 +21,31 @@
                        aria-describedby="Latest releases of Githyb projets">
                     <thead>
                         <tr>
+                            <th scope="col" style="width: 120px">Language</th>
                             <th scope="col">Project</th>
-                            <th scope="col">Release</th>
-                            <th scope="col">Created at</th>
-                            <th scope="col">Published at</th>
+                            <th scope="col" style="width: 120px">Release</th>
+                            <th scope="col" style="width: 200px">Created at</th>
+                            <th scope="col" style="width: 200px">Published at</th>
                         </tr>
                     </thead>
                     <tbody>
                     {% for release in releases %}
                         <tr>
+                            <td>
+                            {% if release.Project.Language == "PHP" %}
+                                <span class="badge badge-primary">{{ release.Project.Language|upper }}</span>
+                            {% else %} 
+                                {% if release.Project.Language == "Go" %}
+                                    <span class="badge badge-info">{{ release.Project.Language|upper }}</span>
+                                {% else %}
+                                    {% if release.Project.Language == "Rust" %}
+                                        <span class="badge badge-warning">{{ release.Project.Language|upper }}</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">{{ release.Project.Language|upper }}</span>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            </td>
                             <td>
                                 <a href="https://github.com/{{ release.Project.Repo }}" target="_blank">{{ release.Project.Name }}</a>
                             </td>

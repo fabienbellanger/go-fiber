@@ -30,8 +30,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o go-fiber .
 # Start a new stage from scratch
 FROM alpine:latest
 
-# RUN adduser -S -D -H -h /app appuser
-# USER appuser
+RUN adduser -S -D -H -h /app appuser
+USER appuser
 
 WORKDIR /app
 
@@ -39,8 +39,6 @@ WORKDIR /app
 COPY --from=builder /app/go-fiber .
 COPY --from=builder /app/config.toml .     
 COPY --from=builder /app/projects.json .
-
-# RUN cat config.toml
 
 EXPOSE 8888
 
