@@ -5,9 +5,9 @@ services:
     container_name: fiber-api
     build: .
     ports: 
-      - "8888:8888"
-    expose:
-      - "8888"
+      - 8888:8888
+    volumes:
+      - ./:/app
     restart: on-failure
     depends_on:
       - mysql
