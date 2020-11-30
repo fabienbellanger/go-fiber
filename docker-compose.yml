@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   api:
-    container_name: gofiber-api
+    container_name: fiber-api
     build: .
     ports: 
       - "8888:8888"
@@ -10,25 +10,25 @@ services:
     depends_on:
       - mysql
     networks:
-      - bridge
+      - fiber-bridge
 
   # la connexion ne fonctionne pas !
   mysql:
-    container_name: gofiber-mysql
+    container_name: fiber-mysql
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password
     restart: on-failure
     volumes:
-      - data_mysql:/var/lib/mysql:delegated
+      - fiber-data_mysql:/var/lib/mysql:delegated
     environment:
       MYSQL_ROOT_PASSWORD: root
     networks:
-      - bridge
+      - fiber-bridge
 
 networks:
-  bridge:
+  fiber-bridge:
     driver: bridge
 
 volumes:
-  data_mysql:
+  fiber-data_mysql:
     driver: local
