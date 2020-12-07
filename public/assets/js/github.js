@@ -8,4 +8,8 @@ $(function() {
         'pageLength': 25,
         'order':      [[ 3, 'desc' ]],
     });
+
+    const expiredAt = moment($("#cacheExpiredAt").text());
+    const duration  = moment.duration(expiredAt.diff(moment())).humanize(true);
+    $('#cacheExpiredAt').html(duration);
 });

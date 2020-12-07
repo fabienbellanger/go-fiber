@@ -73,7 +73,7 @@ func (s *server) handlerBigJSONStream(c *fiber.Ctx) error {
 }
 
 func (s *server) handlerGithub(c *fiber.Ctx) error {
-	releases, err := models.GetReleases()
+	releases, _, err := models.GetReleases()
 	if err != nil {
 		return err
 	}
@@ -82,14 +82,14 @@ func (s *server) handlerGithub(c *fiber.Ctx) error {
 }
 
 func (s *server) handlerReleases(c *fiber.Ctx) error {
-	releases, err := models.GetReleases()
+	releases, cacheExpiredAt, err := models.GetReleases()
 	if err != nil {
 		return err
 	}
 
-	// TODO: Essayer : https://github.com/flosch/pongo2
 	return c.Render("github/index", fiber.Map{
-		"releases":   releases,
-		"nbReleases": len(releases),
+		"releases":       releases,
+		"nbReleases":     len(releases),
+		"cacheExpiredAt": cacheExpiredAt.Format("Mon Jan 02 15:04:05 -0700 2006"),
 	})
 }

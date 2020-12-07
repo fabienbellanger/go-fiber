@@ -170,7 +170,7 @@ func getLatestReleases(projects []Project) ([]Release, error) {
 }
 
 // GetReleases returns latest release of Github projects.
-func GetReleases() ([]Release, error) {
+func GetReleases() ([]Release, time.Time, error) {
 	cachedReleases.mux.Lock()
 	defer cachedReleases.mux.Unlock()
 
@@ -178,17 +178,17 @@ func GetReleases() ([]Release, error) {
 	if len(cachedReleases.releases) == 0 || cachedReleases.expireAt.Before(now) {
 		projects, err := loadProjectsFromFile("projects.json")
 		if err != nil {
-			return cachedReleases.releases, err
+			return cachedReleases.releases, time.Now(), err
 		}
 
 		r, err := getLatestReleases(projects)
 		if err != nil {
-			return r, err
+			return r, time.Now(), err
 		}
 
 		cachedReleases.projects = projects
 		cachedReleases.releases = r
 		cachedReleases.expireAt = now.Local().Add(time.Hour)
 	}
-	return cachedReleases.releases, nil
+	return cachedReleases.releases, cachedReleases.expireAt, nil
 }

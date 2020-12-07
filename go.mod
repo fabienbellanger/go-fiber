@@ -8,7 +8,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gofiber/fiber/v2 v2.2.3
 	github.com/gofiber/jwt/v2 v2.1.0
-	github.com/gofiber/template v1.6.5
+	github.com/gofiber/template v1.6.6
 	github.com/gofiber/websocket/v2 v2.0.2
 	github.com/jmoiron/sqlx v1.2.1-0.20190826204134-d7d95172beb5
 	github.com/markbates/pkger v0.17.1
