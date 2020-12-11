@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"time"
 
 	"github.com/fabienbellanger/go-fiber/models"
 	"github.com/gofiber/fiber/v2"
@@ -90,6 +91,6 @@ func (s *server) handlerReleases(c *fiber.Ctx) error {
 	return c.Render("github/index", fiber.Map{
 		"releases":       releases,
 		"nbReleases":     len(releases),
-		"cacheExpiredAt": cacheExpiredAt.Format("Mon Jan 02 15:04:05 -0700 2006"),
+		"cacheExpiredAt": cacheExpiredAt.Format(time.RFC3339),
 	})
 }
