@@ -15,6 +15,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -80,6 +81,12 @@ func (s *server) initHTTPServer() {
 		ExposeHeaders:    strings.Join(viper.GetStringSlice("server.cors.exposeHeaders"), ", "),
 		AllowCredentials: viper.GetBool("server.cors.allowCredentials"),
 		MaxAge:           int(12 * time.Hour),
+	}))
+
+	// Favicon
+	// -------
+	s.router.Use(favicon.New(favicon.Config{
+		File: "./public/assets/img/go-logo.png",
 	}))
 
 	// Logger
