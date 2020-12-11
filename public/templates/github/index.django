@@ -24,8 +24,7 @@
                             <th scope="col" style="width: 120px">Language</th>
                             <th scope="col">Project</th>
                             <th scope="col" style="width: 120px">Release</th>
-                            <th scope="col" style="width: 200px">Created at</th>
-                            <th scope="col" style="width: 200px">Published at</th>
+                            <th scope="col" style="width: 240px">Published at</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,8 +51,14 @@
                             <td>
                                 <a href="{{ release.URL }}" target="_blank">{{ release.TagName }}</a>
                             </td>
-                            <td class="datetime">{{ release.CreatedAt }}</td>
-                            <td class="datetime">{{ release.PublishedAt }}</td>
+                            <td>
+                                <span class="datetime">{{ release.PublishedAt }}</span>
+                                <small class="font-italic text-secondary">
+                                    (<span class="datetime-human">
+                                        {{ release.PublishedAt }}
+                                    </span>)
+                                </small>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
