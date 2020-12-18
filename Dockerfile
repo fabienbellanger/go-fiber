@@ -1,53 +1,52 @@
-# # Start from golang base image
-# FROM golang:alpine as builder
+FROM golang:alpine AS builder
 
-# # ENV GO111MODULE=on
+LABEL maintainer="Fabien Bellanger <valentil@gmail.com>"
 
-# # Add Maintainer info
-# LABEL maintainer="Fabien Bellanger <valentil@gmail.com>"
+# Set necessary environmet variables needed for our image
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
 
-# # Install git.
-# # Git is required for fetching the dependencies.
-# RUN apk update && apk add --no-cache git
+# Move to working directory /build
+WORKDIR /build
 
-# # Set the current working directory inside the container 
-# WORKDIR /app
+# Copy and download dependency using go mod
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
 
-# # Copy go mod and sum files 
-# COPY go.mod go.sum ./
+# Copy the code into the container
+COPY . .
 
-# # Download all dependencies. Dependencies will be cached if the go.mod and the go.sum files are not changed 
-# RUN go mod download 
+# Pkger
+RUN go get github.com/markbates/pkger/cmd/pkger
+RUN pkger
 
-# # Copy the source from the current directory to the working Directory inside the container 
-# COPY . .
+# Build the application
+RUN go build -a -installsuffix cgo -o go-fiber .
 
-# # Build the Go app
-# RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o go-fiber .
+# Move to /dist directory as the place for resulting binary folder
+WORKDIR /dist
 
-# # -----------------------------------------------------------------------------
+# Copy binary from build to main folder
+RUN cp /build/go-fiber /build/projects.json /build/favicon.png .
+RUN cp /build/config-docker.toml ./config.toml
 
-# # Start a new stage from scratch
-# FROM alpine:latest
+# -----------------------------------------------------------------------------
 
-# RUN adduser -S -D -H -h /app appuser
-# USER appuser
+FROM alpine:latest
 
-# WORKDIR /app
+LABEL maintainer="Fabien Bellanger <valentil@gmail.com>"
 
-# # Copy the Pre-built binary file from the previous stage. Observe we also copied the .env file
-# COPY --from=builder /app/go-fiber .
-# COPY --from=builder /app/config.toml .     
-# COPY --from=builder /app/projects.json .
+RUN apk update && apk --no-cache add ca-certificates
 
-# CMD ["./go-fiber"]
+COPY --from=builder /dist/go-fiber /
+COPY --from=builder /dist/config.toml /
+COPY --from=builder /dist/projects.json /
+COPY --from=builder /dist/favicon.png /
 
-# FROM golang:latest
+# Command to run
+ENTRYPOINT ["./go-fiber"]
 
-# LABEL maintainer="Fabien Bellanger <valentil@gmail.com>"
-
-# ADD . /app
-# # build executable
-# RUN go install github.com/fabienbellanger/go-fiber
-# ENTRYPOINT /go/bin/go-fiber # Document that the service listens on port 8080.
-# EXPOSE 8888
+EXPOSE 9999

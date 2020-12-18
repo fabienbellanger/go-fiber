@@ -15,6 +15,7 @@
 # vendor/
 
 config.toml
+config-docker.toml
 projects.json
 tmp
 .idea

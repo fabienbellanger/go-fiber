@@ -177,6 +177,7 @@ func GetReleases() ([]Release, time.Time, error) {
 	now := time.Now()
 	if len(cachedReleases.releases) == 0 || cachedReleases.expireAt.Before(now) {
 		projects, err := loadProjectsFromFile("projects.json")
+		log.Printf("Projects: %v\n", projects)
 		if err != nil {
 			return cachedReleases.releases, time.Now(), err
 		}

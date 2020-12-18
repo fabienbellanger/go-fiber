@@ -86,7 +86,7 @@ func (s *server) initHTTPServer() {
 	// Favicon
 	// -------
 	s.router.Use(favicon.New(favicon.Config{
-		File: "./public/assets/img/go-logo.png",
+		File: "favicon.png",
 	}))
 
 	// Logger
