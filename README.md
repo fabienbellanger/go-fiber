@@ -3,7 +3,7 @@ Test of [Fiber](https://github.com/gofiber/fiber) Go Web Framework
 
 ## TODO
 -  [How To Deploy a Go Web Application with Docker](https://semaphoreci.com/community/tutorials/how-to-deploy-a-go-web-application-with-docker)
-
+-  [ ] Récupération des informations sur le dépôt (stargazers_count, homepage, language ?, open_issues_count)
 
 ## Sommaire
 -  [Golang web server in production](#golang-web-server-in-production)
