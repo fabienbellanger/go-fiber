@@ -43,5 +43,15 @@
         "name": "Laravel",
         "repo": "laravel/laravel",
         "language": "PHP"
+    },
+    {
+        "name": "Buffalo",
+        "repo": "gobuffalo/buffalo",
+        "language": "Go"
+    },
+    {
+        "name": "Gorilla Mux",
+        "repo": "gorilla/mux",
+        "language": "Go"
     }
 ]
