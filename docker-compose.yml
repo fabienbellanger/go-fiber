@@ -7,7 +7,7 @@ services:
     ports: 
       - 9999:8888
     volumes:
-      - ./:/build
+      - ./:/build:delegated
     restart: always
     depends_on:
       - mysql
@@ -26,6 +26,14 @@ services:
       - MYSQL_USER=fiber
       - MYSQL_PASSWORD=fiber
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    networks:
+      - fiber-bridge
+  
+  grafana:
+    container_name: fiber-grafana
+    image: grafana/grafana:latest
+    ports: 
+      - 3000:3000
     networks:
       - fiber-bridge
 

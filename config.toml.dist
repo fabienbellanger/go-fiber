@@ -34,6 +34,7 @@ name = ""
 [debug]
 pprof = false
 monitor = false
+prometheus = true
 basicAuthUsername = ""
 basicAuthPassword = ""
 

@@ -9,6 +9,7 @@ import (
 
 	"go.uber.org/zap"
 
+	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/fabienbellanger/go-fiber/middlewares/timer"
 	"github.com/fabienbellanger/go-fiber/ws"
 	"github.com/fabienbellanger/goutils"
@@ -49,9 +50,10 @@ func newServer(mode string, hub *ws.Hub) *server {
 	s.router.Use("/assets", filesystem.New(filesystem.Config{
 		Root: pkger.Dir("/public/assets"),
 	}))
+
+	s.initTools()
 	s.routes()
 	s.websocketRoutes(hub)
-	s.initTools()
 	s.initJWT()
 	s.protectedRoutes()
 
@@ -152,6 +154,19 @@ func (s *server) initTools() {
 		},
 	}
 
+	// Prometheus
+	// ----------
+	if viper.GetBool("debug.prometheus") {
+		// metrics := s.router.Group("/metrics")
+		// metrics.Use(basicauth.New(cfg))
+
+		prometheus := fiberprometheus.New("go-fiber")
+		prometheus.RegisterAt(s.router, "/metrics")
+		s.router.Use(prometheus.Middleware)
+	}
+
+	// Pprof
+	// -----
 	if viper.GetBool("debug.pprof") {
 		private := s.router.Group("/debug/pprof")
 		private.Use(basicauth.New(cfg))
