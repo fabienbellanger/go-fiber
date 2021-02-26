@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/andybalholm/brotli v1.0.1 // indirect
-	github.com/ansrivas/fiberprometheus/v2 v2.1.1 // indirect
+	github.com/ansrivas/fiberprometheus/v2 v2.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fabienbellanger/goutils v1.0.15
 	github.com/flosch/pongo2/v4 v4.0.2 // indirect
@@ -32,7 +32,7 @@ require (
 	github.com/valyala/fasthttp v1.21.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
-	golang.org/x/sys v0.0.0-20210220050731-9a76102bfb43 // indirect
+	golang.org/x/sys v0.0.0-20210223212115-eede4237b368 // indirect
 	golang.org/x/text v0.3.5 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
