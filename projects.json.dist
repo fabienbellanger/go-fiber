@@ -53,5 +53,10 @@
         "name": "Gorilla Mux",
         "repo": "gorilla/mux",
         "language": "Go"
+    },
+    {
+        "name": "Axum",
+        "repo": "tokio-rs/axum",
+        "language": "Rust"
     }
 ]
