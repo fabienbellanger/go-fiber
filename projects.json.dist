@@ -58,5 +58,15 @@
         "name": "Axum",
         "repo": "tokio-rs/axum",
         "language": "Rust"
+    },
+    {
+        "name": "Tauri",
+        "repo": "tauri-apps/tauri",
+        "language": "Rust"
+    },
+    {
+        "name": "Tokei",
+        "repo": "XAMPPRocky/tokei",
+        "language": "Rust"
     }
 ]

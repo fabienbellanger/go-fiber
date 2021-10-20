@@ -11,7 +11,6 @@ import (
 
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/fabienbellanger/go-fiber/middlewares/timer"
-	"github.com/fabienbellanger/go-fiber/ws"
 	"github.com/fabienbellanger/goutils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
@@ -37,7 +36,7 @@ type server struct {
 	logger *zap.Logger
 }
 
-func newServer(mode string, hub *ws.Hub) *server {
+func newServer(mode string) *server {
 	s := &server{
 		router: fiber.New(serverConfig()),
 		mode:   mode,
@@ -53,7 +52,6 @@ func newServer(mode string, hub *ws.Hub) *server {
 
 	s.initTools()
 	s.routes()
-	s.websocketRoutes(hub)
 	s.initJWT()
 	s.protectedRoutes()
 
