@@ -68,5 +68,10 @@
         "name": "Tokei",
         "repo": "XAMPPRocky/tokei",
         "language": "Rust"
+    },
+    {
+        "name": "Sloc Cloc and Code",
+        "repo": "boyter/scc",
+        "language": "Go"
     }
 ]
