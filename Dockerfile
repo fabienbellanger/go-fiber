@@ -2,6 +2,8 @@ FROM golang:alpine AS builder
 
 LABEL maintainer="Fabien Bellanger <valentil@gmail.com>"
 
+RUN apk update && apk add git
+
 # Set necessary environmet variables needed for our image
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
@@ -20,7 +22,7 @@ RUN go mod download
 COPY . .
 
 # Pkger
-RUN go get github.com/markbates/pkger/cmd/pkger
+RUN go install github.com/markbates/pkger/cmd/pkger@latest
 RUN pkger
 
 # Build the application
