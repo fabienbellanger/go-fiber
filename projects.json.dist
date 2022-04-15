@@ -73,5 +73,10 @@
         "name": "Sloc Cloc and Code",
         "repo": "boyter/scc",
         "language": "Go"
+    },
+    {
+        "name": "Warp",
+        "repo": "seanmonstar/warp",
+        "language": "Rust"
     }
 ]
