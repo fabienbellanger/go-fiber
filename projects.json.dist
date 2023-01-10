@@ -78,5 +78,20 @@
         "name": "Warp",
         "repo": "seanmonstar/warp",
         "language": "Rust"
+    },
+    {
+        "name": "SurrealDB",
+        "repo": "surrealdb/surrealdb",
+        "language": "Rust"
+    },
+    {
+        "name": "gojq",
+        "repo": "itchyny/gojq",
+        "language": "Go"
+    },
+    {
+        "name": "xq",
+        "repo": "MiSawa/xq",
+        "language": "Rust"
     }
 ]
