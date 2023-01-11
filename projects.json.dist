@@ -93,5 +93,10 @@
         "name": "xq",
         "repo": "MiSawa/xq",
         "language": "Rust"
+    },
+    {
+        "name": "Salvo",
+        "repo": "salvo-rs/salvo",
+        "language": "Rust"
     }
 ]
