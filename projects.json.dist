@@ -98,5 +98,10 @@
         "name": "Salvo",
         "repo": "salvo-rs/salvo",
         "language": "Rust"
+    },
+    {
+        "name": "Yew",
+        "repo": "yewstack/yew",
+        "language": "Rust"
     }
 ]
