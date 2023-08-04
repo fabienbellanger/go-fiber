@@ -103,5 +103,15 @@
         "name": "Yew",
         "repo": "yewstack/yew",
         "language": "Rust"
+    },
+    {
+        "name": "Helix",
+        "repo": "helix-editor/helix",
+        "language": "Rust"
+    },
+    {
+        "name": "Leptos",
+        "repo": "leptos-rs/leptos",
+        "language": "Rust"
     }
 ]
