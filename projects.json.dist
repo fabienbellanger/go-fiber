@@ -113,5 +113,25 @@
         "name": "Leptos",
         "repo": "leptos-rs/leptos",
         "language": "Rust"
+    },
+    {
+        "name": "Dioxus",
+        "repo": "DioxusLabs/dioxus",
+        "language": "Rust"
+    },
+    {
+        "name": "Ratatui",
+        "repo": "ratatui-org/ratatui",
+        "language": "Rust"
+    },
+    {
+        "name": "Oha",
+        "repo": "hatoo/oha",
+        "language": "Rust"
+    },
+    {
+        "name": "Hyperfine",
+        "repo": "sharkdp/hyperfine",
+        "language": "Rust"
     }
-]
+ ]

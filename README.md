@@ -89,3 +89,9 @@ Puis :
 ```bash
 go tool cover -html=<fichier à analyser>
 ```
+
+## Docker
+
+```bash
+docker-compose down && docker-compose build && docker-compose up -d  
+```
